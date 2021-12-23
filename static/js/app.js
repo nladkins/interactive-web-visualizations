@@ -1,3 +1,11 @@
+// Instructions if trying to run this locally:
+    // in the terminal, activate your python environment
+        //example: "conda activate python3.8.8"
+    // change directory ("cd ") to the level where index.html is located
+    // run the command "python -m http.server"
+    // go to the browser and type "http://localhost:8000/" in the address bar and go
+    // now you should be able to test this locally.
+
 function getPlots(id) {
   // read in json
   d3.json("samples.json").then(function(data) {
@@ -24,39 +32,48 @@ function getPlots(id) {
     console.log(`otu_labels: ${otu_labels}`)
 
   // create a trace for the bar chart using slice for the top 10.
-    var trace = {
+    var trace1 = {
       x: otu_ids.slice(0,10),
       y: sample_values.slice(0,10),
       text: otu_labels.slice(0,10),
       marker: {
-      color: 'blue'},
+      color: "blue"},
       type:"bar",
       orientation: "h",
     };
     
   // create data variable
-    var data = [trace];
+    var data1 = [trace1];
 
   // create a title for the plot
-    var layout = {
+    var layout1 = {
       title: "10 of the Top OTUs",
     }
 
-  // create the bar plot
-    Plotly.newPlot("bar", data, layout);
+    // create the bar plot
+    Plotly.newPlot("bar", data1, layout1);
     
   
-  // create a trace for the pie chart using slice for the top 10.
-    var trace1 = {
-        x: otu_ids.slice(0,10),
-        y: sample_values.slice(0,10),
-        mode: "markers",
-        marker: {
-            size: sample_values.slice(0,10),
-            color: otu_ids.slice(0,10)
-        },
-        text: otu_labels.slice(0,10)[0]
-        }
+  // create a trace for the bubble chart using slice for the top 10.
+    var trace2 = {
+      x: otu_ids.slice(0,10),
+      y: sample_values.slice(0,10),
+      mode: "markers",
+      marker: {
+        size: sample_values.slice(0,10),
+        color: otu_ids.slice(0,10)
+      },
+      text: otu_labels
+    }
+
+    var data2 = [trace2]
+    
+    var layout2 = {
+      title: "10 of the Top OTUs",
+    }
+  
+    Plotly.newPlot("bubble", data2, layout2);
+  
   })
 
 }
@@ -67,25 +84,25 @@ function getDemoInfo(id) {
 // Read in the json file again to get the metadata for demographics
   d3.json("samples.json").then((data)=> {
 
-// specifically grab the metadata for the demographic info
-  var metadata = data.metadata;
+  // specifically grab the metadata for the demographic info
+    var metadata = data.metadata;
 
-// print the metadata
-  console.log(metadata)
+  // print the metadata
+    console.log(metadata)
 
-// filter the metadata using the id as the key
-  var result = metadata.filter(meta => meta.id.toString() === id)[0];
+  // filter the metadata using the id as the key
+    var result = metadata.filter(meta => meta.id.toString() === id)[0];
 
-// Map the new information to the the demographic section in the html doc
-  var demographicInfo = d3.select("#sample-metadata");
-  
-// clear out the demographic information for the new id selected
-  demographicInfo.html("");
+  // Map the new information to the the demographic section in the html doc
+    var demographicInfo = d3.select("#sample-metadata");
+    
+  // clear out the demographic information for the new id selected
+    demographicInfo.html("");
 
-// append the relevant demographic to display the id selected by the user
-  Object.entries(result).forEach((key) => {   
+  // append the relevant demographic to display the id selected by the user
+    Object.entries(result).forEach((key) => {
       demographicInfo.append("h5").text(key[0].toUpperCase() + ": " + key[1] + "\n");    
-  });
+    });
   });
 }
 
