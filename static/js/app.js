@@ -99,9 +99,9 @@ function getDemoInfo(id) {
   // clear out the demographic information for the new id selected
     demographicInfo.html("");
 
-  // append the relevant demographic to display the id selected by the user
-    Object.entries(result).forEach((key) => {
-      demographicInfo.append("h5").text(key[0].toUpperCase() + ": " + key[1] + "\n");    
+  // append the relevant demographic item to display the id selected by the user
+    Object.entries(result).forEach((item) => {
+      demographicInfo.append("h5").text(item[0] + ": " + item[1] + "\n");    
     });
   });
 }
