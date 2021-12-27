@@ -6,7 +6,7 @@
     // go to the browser and type "http://localhost:8000/" in the address bar and go
     // now you should be able to test this locally.
 
-function getPlots(id) {
+function getPlots(idSelected) {
   // read in json
   d3.json("samples.json").then(function(data) {
 
@@ -18,44 +18,46 @@ function getPlots(id) {
 
   // For loop to populate arrays
     for (let i = 0; i < data.samples.length; i++) {
-      row = data.samples[i];
-      id.push(row.id);
-      otu_ids.push(row.otu_ids)
-      sample_values.push(row.sample_values)
-      otu_labels.push(row.otu_labels);
+      if (data.samples[i].id == idSelected){
+        row = data.samples[i];
+        id.push(row.id);
+        otu_ids.push(row.otu_ids)
+        sample_values.push(row.sample_values)
+        otu_labels.push(row.otu_labels);
+      }
     }
 
   // Verify Data was pushed correctly.
-    console.log(`ID: ${id}`)
-    console.log(`otu_ids: ${otu_ids}`)
-    console.log(`sample_values: ${sample_values}`)
-    console.log(`otu_labels: ${otu_labels}`)
+    // console.log(`ID: ${id}`)
+    // console.log(`otu_ids: ${otu_ids}`)
+    // console.log(`sample_values: ${sample_values}`)
+    // console.log(`otu_labels: ${otu_labels}`)
 
   // Fill dropdown
     var choose = d3.select('#selDataset')
     
   // append
-    id.forEach((selection) => {
-      choose
-        .append('change')
-        .text(selection)
-        .property('value', selection);
-      });    
-  // 1st id
-    var startid = 940;
-    choose.on("change", optionChanged)
+  //   id.forEach((selection) => {
+  //     choose
+  //       .append('change')
+  //       .text(selection)
+  //       .property('value', selection);
+  //     });    
+  // // 1st id
+  //   var startid = 940;
+    // choose.on("change", optionChanged)
 
   // 1st variables for the charts
-    let id1 = id.filter(data => data.id == startid)
-    let otu_ids1 = otu_ids[0]
-    let sample_values1 = sample_values[0]
-    let otu_labels1 = otu_labels[0]
-
+    // let id1 = id.filter(data => data.id == startid)
+    // let otu_ids1 = otu_ids[0]
+    // let sample_values1 = sample_values[0]
+    // let otu_labels1 = otu_labels[0]
+  // console.log(otu_ids)
   // create a trace for the bar chart using slice for the top 10.
     var trace1 = {
-      x: otu_ids1.slice(0,10).reverse(),
-      y: sample_values1.slice(0,10),
-      text: otu_labels1.slice(0,10),
+      y: otu_ids[0].map(data => `OTU ${data}`).slice(0,10).reverse(),
+      x: sample_values[0].slice(0,10).reverse(),
+      text: otu_labels[0].slice(0,10).reverse(),
       marker: {
       color: "blue"},
       type:"bar",
@@ -76,14 +78,14 @@ function getPlots(id) {
   
   // create a trace for the bubble chart using slice for the top 10.
     var trace2 = {
-      x: otu_ids1.slice(0,10),
-      y: sample_values1.slice(0,10),
+      x: otu_ids[0].slice(0,10),
+      y: sample_values[0].slice(0,10),
       mode: "markers",
       marker: {
-        size: sample_values1.slice(0,10),
-        color: otu_ids1.slice(0,10)
+        size: sample_values[0].slice(0,10),
+        color: otu_ids[0].slice(0,10)
       },
-      text: otu_labels1
+      text: otu_labels[0]
     }
 
     var data2 = [trace2]
@@ -97,7 +99,7 @@ function getPlots(id) {
   })
 
   // Need a function to identify the event that changed
-  function optionChanged(id1) {
+  function optionChanged(id) {
   getPlots(id);
   getDemoInfo(id);
   }
@@ -114,7 +116,7 @@ function getDemoInfo(id) {
     var metadata = data.metadata;
 
   // print the metadata
-    console.log(metadata)
+    // console.log(metadata)
 
   // filter the metadata using the id as the key
     var result = metadata.filter(md => md.id.toString() === id)[0];
@@ -138,15 +140,15 @@ function init() {
 
 // read the json data again pulling in the names for the drop down menu items
   d3.json("samples.json").then((data)=> {
-    console.log(data)
+    // console.log(data)
 
   // get the name data for the drop down items
     data.names.forEach(function(name) {
         dropdown.append("option").text(name).property("value");
     
   // using the name info to call out the function for the demographic info
-    getPlots(data.samples[0]);
-    getDemoInfo(data.samples[0]);
+    getPlots(data.names[0]);
+    getDemoInfo(data.names[0]);
       
     });
 
