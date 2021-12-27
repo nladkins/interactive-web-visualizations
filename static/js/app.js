@@ -97,13 +97,11 @@ function getPlots(idSelected) {
     Plotly.newPlot("bubble", data2, layout2);
   
   })
-
-  // Need a function to identify the event that changed
-  function optionChanged(id) {
-  getPlots(id);
-  getDemoInfo(id);
-  }
-
+}
+// Need a function to identify the event that changed
+function optionChanged(id) {
+getPlots(id);
+getDemoInfo(id);
 }
 
 // collect the demographic information using the id as the key
