@@ -31,11 +31,31 @@ function getPlots(id) {
     console.log(`sample_values: ${sample_values}`)
     console.log(`otu_labels: ${otu_labels}`)
 
+  // Fill dropdown
+    var choose = d3.select('#selDataset')
+    
+  // append
+    id.forEach((selection) => {
+      choose
+        .append('change')
+        .text(selection)
+        .property('value', selection);
+      });    
+  // 1st id
+    var startid = 940;
+    choose.on("change", optionChanged)
+
+  // 1st variables for the charts
+    let id1 = id.filter(data => data.id == startid)
+    let otu_ids1 = otu_ids[0]
+    let sample_values1 = sample_values[0]
+    let otu_labels1 = otu_labels[0]
+
   // create a trace for the bar chart using slice for the top 10.
     var trace1 = {
-      x: otu_ids.slice(0,10),
-      y: sample_values.slice(0,10),
-      text: otu_labels.slice(0,10),
+      x: otu_ids1.slice(0,10).reverse(),
+      y: sample_values1.slice(0,10),
+      text: otu_labels1.slice(0,10),
       marker: {
       color: "blue"},
       type:"bar",
@@ -56,14 +76,14 @@ function getPlots(id) {
   
   // create a trace for the bubble chart using slice for the top 10.
     var trace2 = {
-      x: otu_ids.slice(0,10),
-      y: sample_values.slice(0,10),
+      x: otu_ids1.slice(0,10),
+      y: sample_values1.slice(0,10),
       mode: "markers",
       marker: {
-        size: sample_values.slice(0,10),
-        color: otu_ids.slice(0,10)
+        size: sample_values1.slice(0,10),
+        color: otu_ids1.slice(0,10)
       },
-      text: otu_labels
+      text: otu_labels1
     }
 
     var data2 = [trace2]
@@ -75,6 +95,12 @@ function getPlots(id) {
     Plotly.newPlot("bubble", data2, layout2);
   
   })
+
+  // Need a function to identify the event that changed
+  function optionChanged(id1) {
+  getPlots(id);
+  getDemoInfo(id);
+  }
 
 }
 
@@ -91,7 +117,7 @@ function getDemoInfo(id) {
     console.log(metadata)
 
   // filter the metadata using the id as the key
-    var result = metadata.filter(meta => meta.id.toString() === id)[0];
+    var result = metadata.filter(md => md.id.toString() === id)[0];
 
   // Map the new information to the the demographic section in the html doc
     var demographicInfo = d3.select("#sample-metadata");
@@ -104,12 +130,6 @@ function getDemoInfo(id) {
       demographicInfo.append("h5").text(item[0] + ": " + item[1] + "\n");    
     });
   });
-}
-
-// Need a function to identify the event that changed
-function optionChanged(id) {
-  getPlots(id);
-  getDemoInfo(id);
 }
 
 function init() {
@@ -125,8 +145,8 @@ function init() {
         dropdown.append("option").text(name).property("value");
     
   // using the name info to call out the function for the demographic info
-    getPlots(data.names[0]);
-    getDemoInfo(data.names[0]);
+    getPlots(data.samples[0]);
+    getDemoInfo(data.samples[0]);
       
     });
 
