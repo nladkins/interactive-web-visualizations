@@ -28,31 +28,14 @@ function getPlots(idSelected) {
     }
 
   // Verify Data was pushed correctly.
-    // console.log(`ID: ${id}`)
-    // console.log(`otu_ids: ${otu_ids}`)
-    // console.log(`sample_values: ${sample_values}`)
-    // console.log(`otu_labels: ${otu_labels}`)
+    console.log(`ID: ${id}`)
+    console.log(`otu_ids: ${otu_ids}`)
+    console.log(`sample_values: ${sample_values}`)
+    console.log(`otu_labels: ${otu_labels}`)
 
   // Fill dropdown
     var choose = d3.select('#selDataset')
     
-  // append
-  //   id.forEach((selection) => {
-  //     choose
-  //       .append('change')
-  //       .text(selection)
-  //       .property('value', selection);
-  //     });    
-  // // 1st id
-  //   var startid = 940;
-    // choose.on("change", optionChanged)
-
-  // 1st variables for the charts
-    // let id1 = id.filter(data => data.id == startid)
-    // let otu_ids1 = otu_ids[0]
-    // let sample_values1 = sample_values[0]
-    // let otu_labels1 = otu_labels[0]
-  // console.log(otu_ids)
   // create a trace for the bar chart using slice for the top 10.
     var trace1 = {
       y: otu_ids[0].map(data => `OTU ${data}`).slice(0,10).reverse(),
@@ -69,7 +52,9 @@ function getPlots(idSelected) {
 
   // create a title for the plot
     var layout1 = {
-      title: "10 of the Top OTUs",
+      title: "Top 10 operational taxonomic units (OTUs) per Sample",
+      xaxis:{title: "OTU ID"},
+      yaxis:{title: "Sample Values"},
     }
 
     // create the bar plot
@@ -91,7 +76,9 @@ function getPlots(idSelected) {
     var data2 = [trace2]
     
     var layout2 = {
-      title: "10 of the Top OTUs",
+      title: "Top 10 operational taxonomic units (OTUs) occurence per Sample (bubble size proportional to amount)",
+      xaxis:{title: "OTU ID"},
+      yaxis:{title: "Sample Values"},
     }
   
     Plotly.newPlot("bubble", data2, layout2);
@@ -114,7 +101,7 @@ function getDemoInfo(id) {
     var metadata = data.metadata;
 
   // print the metadata
-    // console.log(metadata)
+    console.log(metadata)
 
   // filter the metadata using the id as the key
     var result = metadata.filter(md => md.id.toString() === id)[0];
