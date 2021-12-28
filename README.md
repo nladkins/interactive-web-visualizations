@@ -24,7 +24,7 @@ The bubble plot also focuses on the top 10 microbial species.  However, the bubb
 
 The console.log() function was used throughout the code when it was developed.  Due to the length of the console, those were moved prior to deployment.  This made the loading process a bit easier on the computer.  
 
-### Instructions for local deployment
+## Instructions for local deployment
 
 Due to increase in security, running this directly on a local machine may not be possible.  To run this locally, a user needs to create a server environment on their machine.  THe instructions for doing so include:
 
